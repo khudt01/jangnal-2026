@@ -134,8 +134,6 @@ body { background: #eae3cf; }
   box-shadow: 0 3px 10px rgba(224, 106, 37, 0.35);
 }
 
-.deadline { font-size: 0.78rem; color: #87866d; margin-top: 10px; }
-
 /* ---- 본문 장(step) ---- */
 main section { text-align: center; }
 #rsvp { text-align: left; }

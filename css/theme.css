@@ -1,5 +1,4 @@
-/* 콘셉트 A 「잔치 초대장」 스킨 (2026-07-04 확정)
-   원본 시안: 5. 홍보/초대장 시안/시안A_잔치초대장.html (내부 폴더)
+/* 콘셉트 A 「잔치 초대장」 스킨
    장식 요소(프레임·매듭 점·낙관 도장·구분선)는 전부 스크린 리더에서 숨긴다. */
 
 body { background: #eae3cf; }
@@ -8,9 +7,10 @@ body { background: #eae3cf; }
   position: relative;
   background: var(--bg);
   margin: 14px auto;
-  padding: 34px 26px 44px;
+  padding: 30px 24px 40px;
   border-radius: 6px;
   box-shadow: 0 2px 16px rgba(43, 42, 36, 0.1);
+  overflow: hidden; /* 표지 열림 연출이 카드 밖으로 새지 않게 */
 }
 @media (min-width: 520px) {
   .container { margin: 28px auto; }
@@ -41,29 +41,29 @@ body { background: #eae3cf; }
 /* ---- 표지 ---- */
 .hero {
   text-align: center;
-  padding: 24px 0 8px;
+  padding: 18px 0 6px;
 }
 
-.hero-logo { width: 54px; height: 54px; margin-bottom: 12px; }
+.hero-logo { width: 46px; height: 46px; margin-bottom: 12px; }
 
 .eyebrow {
   font-size: 0.72rem;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   color: #87866d;
   font-weight: 500;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .title-row {
   position: relative;
   display: inline-block;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .hero h1 {
   font-family: "Gowun Batang", serif;
-  font-size: 2.8rem;
-  line-height: 1.25;
+  font-size: 2.7rem;
+  line-height: 1.22;
   letter-spacing: 0.04em;
 }
 
@@ -96,46 +96,34 @@ body { background: #eae3cf; }
   text-indent: 0.45em;
   color: #4a4938;
   font-weight: 500;
-  margin-bottom: 22px;
+  margin-bottom: 20px;
 }
 
-.divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 22px;
+/* 대표 이미지: 작년 함께하는 장날 단체사진의 수채화 변형 (순수 장식) */
+.cover-photo {
+  margin: 0 0 22px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e3decb;
+  box-shadow: 0 3px 14px rgba(43, 42, 36, 0.14);
 }
-.divider .line { width: 52px; height: 1px; background: #c9c3ae; }
-.divider .diamond { width: 7px; height: 7px; background: var(--orange); transform: rotate(45deg); }
-.divider .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--teal); }
+.cover-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 
 .hero-date {
   font-family: "Gowun Batang", serif;
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
-.hero-time { font-size: 0.95rem; color: #4a4938; margin-bottom: 4px; }
-.hero-place { font-size: 0.85rem; color: #87866d; margin-bottom: 22px; }
-
-/* 단체 대표 사진 자리 (사진 확정 후 img 교체) */
-.photo {
-  width: 100%;
-  height: 150px;
-  border-radius: 10px;
+.hero-when {
+  font-size: 0.92rem;
+  color: #4a4938;
   margin-bottom: 24px;
-  background: linear-gradient(120deg, rgba(23, 142, 142, 0.14), rgba(224, 106, 37, 0.16));
-  border: 1px solid #e3decb;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  overflow: hidden;
 }
-.photo img { width: 72px; height: 72px; opacity: 0.5; }
-.photo .cap { font-size: 0.72rem; color: #87866d; letter-spacing: 0.08em; }
 
 .hero-cta {
   text-decoration: none;
@@ -147,8 +135,6 @@ body { background: #eae3cf; }
 }
 
 .deadline { font-size: 0.78rem; color: #87866d; margin-top: 10px; }
-
-.hero-links { margin-top: 16px; }
 
 /* ---- 본문 장(step) ---- */
 main section { text-align: center; }
@@ -177,10 +163,25 @@ main h2::after {
   margin-bottom: 10px;
 }
 
-footer {
-  border-top: 1px solid var(--line);
-  padding-top: 16px;
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--muted);
+/* ================= 전환 애니메이션 ================= */
+/* 한 장이 화면에 나타날 때 부드럽게 떠오른다.
+   (JS가 hidden을 해제하면 display 복원과 함께 재생된다.)
+   prefers-reduced-motion에서는 base.css가 duration을 0으로 눌러 즉시 표시. */
+@keyframes stepIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+[data-step]:not([hidden]) {
+  animation: stepIn 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* 표지 '초대장 열기': 종이 초대장이 위로 젖혀지며 열리는 연출.
+   이 규칙은 위 stepIn보다 뒤에 두어 열기 순간 우선 적용된다. */
+@keyframes coverOpen {
+  0%   { opacity: 1; transform: perspective(1100px) rotateX(0deg) translateY(0) scale(1); }
+  100% { opacity: 0; transform: perspective(1100px) rotateX(-16deg) translateY(-30px) scale(1.03); }
+}
+.hero.cover-opening {
+  transform-origin: center top;
+  animation: coverOpen 0.6s ease-in both;
 }

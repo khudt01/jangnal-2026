@@ -147,10 +147,7 @@ button[aria-disabled="true"] { opacity: 0.6; cursor: default; }
 .step-nav .step-next { flex: 1 1 auto; }
 .step-nav .secondary { flex: 0 0 auto; }
 
-/* 표지 보조 링크·소리 토글 */
-.hero-links { margin-top: 14px; }
-.hero-links a { font-size: 0.95rem; }
-
+/* 표지 소리 토글 */
 .sound-toggle {
   display: inline-block;
   margin-top: 18px;

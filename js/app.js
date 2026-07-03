@@ -19,8 +19,11 @@
   // JS가 없으면 모든 장이 그대로 펼쳐져 보인다 (점진적 향상).
   var steps = Array.prototype.slice.call(document.querySelectorAll("[data-step]"));
   var openBtn = document.getElementById("open-btn");
-  var gotoRsvp = document.getElementById("goto-rsvp");
   var soundToggle = document.getElementById("sound-toggle");
+
+  function reduceMotion() {
+    return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
 
   function goStep(i, opts) {
     opts = opts || {};
@@ -34,6 +37,27 @@
       }
       window.scrollTo(0, 0);
     }
+  }
+
+  // 표지 '초대장 열기': 종이 초대장이 젖혀지며 열리는 연출 후 첫 장으로.
+  // 모션을 줄이는 사용자에겐 연출 없이 바로 넘어간다.
+  function openInvitation() {
+    var hero = steps[0];
+    if (reduceMotion()) {
+      goStep(1, { sound: "open" });
+      return;
+    }
+    window.JangnalSound.play("open");
+    hero.classList.add("cover-opening");
+    var done = false;
+    function finish() {
+      if (done) return;
+      done = true;
+      hero.classList.remove("cover-opening");
+      goStep(1, { silent: true }); // 열림 소리는 이미 재생됨
+    }
+    hero.addEventListener("animationend", finish, { once: true });
+    setTimeout(finish, 700); // animationend 누락 대비 폴백
   }
 
   function initSteps() {
@@ -60,11 +84,7 @@
     });
     openBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      goStep(1, { sound: "open" });
-    });
-    gotoRsvp.addEventListener("click", function (e) {
-      e.preventDefault();
-      goStep(steps.length - 1, { sound: "open" });
+      openInvitation();
     });
     goStep(0, { silent: true, noFocus: true });
   }

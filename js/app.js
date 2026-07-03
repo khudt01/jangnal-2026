@@ -15,6 +15,72 @@
   var STORAGE_KEY = "jangnal2026_rsvp";
   var inFlight = false;
 
+  // ---- 장 넘김 (한 장씩 보기, 콘셉트 확정 전 공통 프레임) ----
+  // JS가 없으면 모든 장이 그대로 펼쳐져 보인다 (점진적 향상).
+  var steps = Array.prototype.slice.call(document.querySelectorAll("[data-step]"));
+  var openBtn = document.getElementById("open-btn");
+  var gotoRsvp = document.getElementById("goto-rsvp");
+  var soundToggle = document.getElementById("sound-toggle");
+
+  function goStep(i, opts) {
+    opts = opts || {};
+    steps.forEach(function (s, j) { s.hidden = j !== i; });
+    if (!opts.silent) window.JangnalSound.play(opts.sound || "page");
+    if (!opts.noFocus) {
+      var h = steps[i].querySelector("h1, h2");
+      if (h) {
+        h.setAttribute("tabindex", "-1");
+        h.focus();
+      }
+      window.scrollTo(0, 0);
+    }
+  }
+
+  function initSteps() {
+    if (steps.length < 2) return;
+    steps.forEach(function (s, i) {
+      if (i === 0) return;
+      var nav = document.createElement("div");
+      nav.className = "step-nav";
+      var prev = document.createElement("button");
+      prev.type = "button";
+      prev.className = "secondary";
+      prev.textContent = i === 1 ? "표지로" : "이전 장";
+      prev.addEventListener("click", function () { goStep(i - 1); });
+      nav.appendChild(prev);
+      if (i < steps.length - 1) {
+        var next = document.createElement("button");
+        next.type = "button";
+        next.className = "step-next";
+        next.textContent = "다음 장: " + steps[i + 1].getAttribute("data-step");
+        next.addEventListener("click", function () { goStep(i + 1); });
+        nav.appendChild(next);
+      }
+      s.appendChild(nav);
+    });
+    openBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      goStep(1, { sound: "open" });
+    });
+    gotoRsvp.addEventListener("click", function (e) {
+      e.preventDefault();
+      goStep(steps.length - 1, { sound: "open" });
+    });
+    goStep(0, { silent: true, noFocus: true });
+  }
+
+  function syncSoundToggle() {
+    soundToggle.textContent = window.JangnalSound.isEnabled() ? "소리 켜짐" : "소리 꺼짐";
+  }
+  soundToggle.hidden = false;
+  soundToggle.addEventListener("click", function () {
+    window.JangnalSound.setEnabled(!window.JangnalSound.isEnabled());
+    syncSoundToggle();
+    window.JangnalSound.play("page");
+  });
+  syncSoundToggle();
+  initSteps();
+
   function setStatus(msg, kind) {
     statusEl.textContent = msg;
     statusEl.className = "status" + (kind ? " " + kind : "");
@@ -147,6 +213,7 @@
   }
 
   function showDone(updated, attendance) {
+    window.JangnalSound.play("success");
     form.hidden = true;
     doneEl.hidden = false;
     doneTitle.textContent = updated ? "응답을 수정했습니다" : "응답이 접수되었습니다";

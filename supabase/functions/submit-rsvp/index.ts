@@ -9,7 +9,7 @@ const CORS = {
 
 const ATTENDANCE = ["참석", "불참"];
 const CATEGORY = ["조합원", "후원회원", "외빈", "기타"];
-const ACCOMMODATIONS = ["문자통역", "수어통역", "휠체어 접근", "점자·큰글자 자료", "기타"];
+const ACCOMMODATIONS = ["문자통역", "수어통역", "기타"];
 
 function bad(msg: string, status = 400): Response {
   return new Response(JSON.stringify({ ok: false, error: msg }), {

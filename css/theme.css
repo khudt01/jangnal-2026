@@ -44,7 +44,13 @@ body { background: #eae3cf; }
   padding: 18px 0 6px;
 }
 
-.hero-logo { width: 46px; height: 46px; margin-bottom: 12px; }
+.hero-logo {
+  display: block;
+  width: 280px;
+  max-width: 78%;
+  height: auto;
+  margin: 0 auto 16px;
+}
 
 .eyebrow {
   font-size: 0.72rem;

@@ -15,102 +15,81 @@
   var STORAGE_KEY = "jangnal2026_rsvp";
   var inFlight = false;
 
-  // ---- 장 넘김 (한 장씩 보기, 콘셉트 확정 전 공통 프레임) ----
-  // JS가 없으면 모든 장이 그대로 펼쳐져 보인다 (점진적 향상).
-  var steps = Array.prototype.slice.call(document.querySelectorAll("[data-step]"));
-  var openBtn = document.getElementById("open-btn");
-  var soundToggle = document.getElementById("sound-toggle");
-
   function reduceMotion() {
     return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   }
 
-  function goStep(i, opts) {
-    opts = opts || {};
-    steps.forEach(function (s, j) { s.hidden = j !== i; });
-    if (!opts.silent) window.JangnalSound.play(opts.sound || "page");
-    if (!opts.noFocus) {
-      var h = steps[i].querySelector("h1, h2");
-      if (h) {
-        h.setAttribute("tabindex", "-1");
-        h.focus();
-      }
-      window.scrollTo(0, 0);
-    }
-  }
-
-  // 표지 '초대장 열기': 종이 초대장이 젖혀지며 열리는 연출 후 첫 장으로.
-  // 모션을 줄이는 사용자에겐 연출 없이 바로 넘어간다.
-  function openInvitation() {
-    var hero = steps[0];
-    if (reduceMotion()) {
-      goStep(1, { sound: "open" });
-      return;
-    }
-    window.JangnalSound.play("open");
-    hero.classList.add("cover-opening");
-    var done = false;
-    function finish() {
-      if (done) return;
-      done = true;
-      hero.classList.remove("cover-opening");
-      goStep(1, { silent: true }); // 열림 소리는 이미 재생됨
-    }
-    hero.addEventListener("animationend", finish, { once: true });
-    setTimeout(finish, 700); // animationend 누락 대비 폴백
-  }
-
-  // 다음 장으로 넘어가는 버튼의 라벨 (콜론 없이 자연스러운 동사형)
-  var NEXT_LABELS = {
-    "행사 안내": "행사 안내 보기",
-    "참석 여부": "참석 여부 알리기"
-  };
-
-  function initSteps() {
-    if (steps.length < 2) return;
-    var last = steps.length - 1;
-    steps.forEach(function (s, i) {
-      if (i === 0) return;
-      var nav = document.createElement("div");
-      nav.className = "step-nav";
-      if (i < last) {
-        // 중간 장: 다음으로 나아가는 버튼만 (뒤로 가기 버튼 없음)
-        var next = document.createElement("button");
-        next.type = "button";
-        next.className = "step-next";
-        var nd = steps[i + 1].getAttribute("data-step");
-        next.textContent = NEXT_LABELS[nd] || (nd + " 보기");
-        next.addEventListener("click", function () { goStep(i + 1); });
-        nav.appendChild(next);
-      } else {
-        // 마지막 장에만 표지로 돌아가는 버튼
-        var home = document.createElement("button");
-        home.type = "button";
-        home.className = "secondary step-home";
-        home.textContent = "표지로 돌아가기";
-        home.addEventListener("click", function () { goStep(0); });
-        nav.appendChild(home);
-      }
-      s.appendChild(nav);
-    });
-    openBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      openInvitation();
-    });
-    goStep(0, { silent: true, noFocus: true });
-  }
-
+  // ---- 상단 소리 토글 (기본 꺼짐) ----
+  var soundToggle = document.getElementById("sound-toggle");
   function syncSoundToggle() {
-    soundToggle.textContent = window.JangnalSound.isEnabled() ? "소리 켜짐" : "소리 꺼짐";
+    var on = window.JangnalSound.isEnabled();
+    soundToggle.textContent = on ? "소리 켜짐" : "소리 꺼짐";
+    soundToggle.setAttribute("aria-pressed", on ? "true" : "false");
   }
-  soundToggle.hidden = false;
   soundToggle.addEventListener("click", function () {
-    window.JangnalSound.setEnabled(!window.JangnalSound.isEnabled());
+    var next = !window.JangnalSound.isEnabled();
+    window.JangnalSound.setEnabled(next);
     syncSoundToggle();
-    window.JangnalSound.play("page");
+    if (next) window.JangnalSound.play("unfold"); // 켤 때 펼침 소리로 미리듣기
   });
   syncSoundToggle();
-  initSteps();
+
+  // ---- 접이식(모시는 글·세부 일정): 눌러서 아래로 부드럽게 펼침 ----
+  // JS가 없으면 <details>가 그대로 동작해 내용을 펼쳐 볼 수 있다(점진적 향상).
+  // JS는 여기에 높이 전환 애니메이션과 '펼침' 소리를 더한다.
+  var FOLD_MS = 460;
+
+  function setupFold(details) {
+    var summary = details.querySelector("summary");
+    var body = details.querySelector(".fold-body");
+    if (!summary || !body) return;
+    var animating = false;
+
+    details.open = false; // JS 사용 가능: 기본은 접힌 상태로 시작
+
+    summary.addEventListener("click", function (e) {
+      e.preventDefault(); // 기본 즉시 토글을 막고 애니메이션으로 대체
+      if (animating) return;
+      if (details.open) collapse();
+      else expand();
+    });
+
+    function animate(from, to, after) {
+      animating = true;
+      body.style.overflow = "hidden";
+      body.style.height = from + "px";
+      void body.offsetHeight; // 리플로우 강제로 시작 높이 확정
+      body.style.transition = "height " + FOLD_MS + "ms cubic-bezier(0.22,0.61,0.36,1)";
+      body.style.height = to + "px";
+      var done = false;
+      function end(e) {
+        if (e && e.target !== body) return;
+        if (done) return;
+        done = true;
+        body.removeEventListener("transitionend", end);
+        body.style.height = "";
+        body.style.overflow = "";
+        body.style.transition = "";
+        animating = false;
+        if (after) after();
+      }
+      body.addEventListener("transitionend", end);
+      setTimeout(end, FOLD_MS + 80); // transitionend 누락 대비 폴백
+    }
+
+    function expand() {
+      window.JangnalSound.play("unfold");
+      details.open = true; // 내용 노출(접근성 트리에 반영)
+      if (reduceMotion()) return;
+      animate(0, body.scrollHeight);
+    }
+
+    function collapse() {
+      if (reduceMotion()) { details.open = false; return; }
+      animate(body.scrollHeight, 0, function () { details.open = false; });
+    }
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("[data-fold]"), setupFold);
 
   function setStatus(msg, kind) {
     statusEl.textContent = msg;

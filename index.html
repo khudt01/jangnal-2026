@@ -18,13 +18,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/theme.css">
+<!-- JS 사용 가능 표시(접이식 기본 접힘). JS 없으면 모든 내용이 그대로 펼쳐진다. -->
+<script>document.documentElement.className += " js";</script>
 </head>
 <body>
 <div class="container">
   <div class="frame" aria-hidden="true"></div>
 
+  <!-- ===== 상단 바: 소리 토글 (기본 꺼짐) ===== -->
+  <div class="topbar">
+    <button type="button" id="sound-toggle" class="sound-toggle" aria-pressed="false">소리 꺼짐</button>
+  </div>
+
   <!-- ===== 표지 (콘셉트 A 「잔치 초대장」) ===== -->
-  <header class="hero" data-step="표지">
+  <header class="hero">
     <img class="hero-logo" src="assets/logo-wide.png" alt="함께하는장애인교원노동조합" width="900" height="79">
     <p class="eyebrow">창립 7주년</p>
     <div class="title-row">
@@ -40,30 +47,41 @@
 
     <p class="hero-date">2026년 7월 25일 토요일</p>
     <p class="hero-when">오후 5시 30분, 서울 여의도</p>
-
-    <a class="btn btn-block hero-cta" id="open-btn" href="#invite">초대장 열기</a>
-    <button type="button" id="sound-toggle" class="sound-toggle" hidden>소리 켜짐</button>
   </header>
 
   <main>
-    <!-- ===== 모시는 글 ===== -->
-    <section id="invite" aria-labelledby="h-invite" data-step="모시는 글">
-      <h2 id="h-invite">모시는 글</h2>
-      <!-- TODO: 위원장 인사말 확정 문안으로 교체 -->
-      <p>일곱 해를 함께 걸어온 당신을 초대합니다.</p>
-      <p>조합원, 후원회원, 그리고 그동안 연대해 온 귀한 손님 모두 환영합니다.</p>
-    </section>
+    <!-- ===== 모시는 글 (접이식: 눌러서 펼침) ===== -->
+    <details class="fold fold-quote" data-fold>
+      <summary class="fold-summary">
+        <span class="fold-title">모시는 글</span>
+        <span class="fold-icon" aria-hidden="true"></span>
+      </summary>
+      <div class="fold-body">
+        <div class="fold-inner">
+          <!-- TODO: 위원장 인사말 확정 문안으로 교체 -->
+          <p>일곱 해를 함께 걸어온 당신을 초대합니다.</p>
+          <p>조합원, 후원회원, 그리고 그동안 연대해 온 귀한 손님 모두 환영합니다.</p>
+        </div>
+      </div>
+    </details>
 
-    <!-- ===== 행사 안내 ===== -->
-    <section aria-labelledby="h-info" data-step="행사 안내">
-      <h2 id="h-info">행사 안내</h2>
-      <p>일시: 2026년 7월 25일 토요일 오후 5시 30분</p>
-      <p>장소: 서울 여의도 (확정되는 대로 이 초대장에서 안내합니다)</p>
-      <p>편의지원: 문자통역과 수어통역이 준비됩니다. 그 밖에 필요한 편의는 참석 응답에서 알려주세요.</p>
-    </section>
+    <!-- ===== 세부 일정 (접이식: 눌러서 펼침) ===== -->
+    <details class="fold" data-fold>
+      <summary class="fold-summary">
+        <span class="fold-title">세부 일정</span>
+        <span class="fold-icon" aria-hidden="true"></span>
+      </summary>
+      <div class="fold-body">
+        <div class="fold-inner">
+          <p>일시: 2026년 7월 25일 토요일 오후 5시 30분</p>
+          <p>장소: 서울 여의도 (확정되는 대로 이 초대장에서 안내합니다)</p>
+          <p>편의지원: 문자통역과 수어통역이 준비됩니다. 그 밖에 필요한 편의는 참석 응답에서 알려주세요.</p>
+        </div>
+      </div>
+    </details>
 
-    <!-- ===== 참석 응답 (RSVP) ===== -->
-    <section id="rsvp" aria-labelledby="h-rsvp" data-step="참석 여부">
+    <!-- ===== 참석 응답 (RSVP) : 항상 표시 ===== -->
+    <section id="rsvp" aria-labelledby="h-rsvp">
       <h2 id="h-rsvp">참석 여부 알려주기</h2>
 
       <form id="rsvp-form" novalidate>

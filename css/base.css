@@ -138,29 +138,69 @@ button[aria-disabled="true"] { opacity: 0.6; cursor: default; }
 
 .btn-block { display: block; width: 100%; }
 
-/* ---- 장 넘김 내비게이션 (JS가 각 장 끝에 삽입) ---- */
-.step-nav {
+/* ---- 상단 바: 소리 토글 (기본 꺼짐) ---- */
+.topbar {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 28px;
+  justify-content: flex-end;
+  margin-bottom: 8px;
 }
-.step-nav .step-next { flex: 1 1 auto; }
-.step-nav .secondary { flex: 0 0 auto; }
-
-/* 표지 소리 토글 */
 .sound-toggle {
-  display: inline-block;
-  margin-top: 18px;
-  min-height: 44px;
-  padding: 8px 18px;
-  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
   background: transparent;
   color: var(--muted);
   border: 1.5px solid var(--line);
   border-radius: 22px;
 }
 .sound-toggle:hover { background: rgba(0, 0, 0, 0.04); color: var(--ink); }
+.sound-toggle[aria-pressed="true"] { color: var(--teal); border-color: var(--teal); }
+
+/* ---- 접이식 (모시는 글 · 세부 일정): 눌러서 아래로 펼침 ---- */
+.fold {
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.fold-summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 56px;
+  padding: 14px 18px;
+  font-weight: 700;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.fold-summary::-webkit-details-marker { display: none; }
+.fold-summary:hover { background: rgba(23, 142, 142, 0.05); }
+.fold-title { font-size: 1.1rem; }
+/* 펼침 안내 화살표 (장식): 접힘=아래, 펼침=위 */
+.fold-icon {
+  flex: 0 0 auto;
+  width: 11px;
+  height: 11px;
+  margin-right: 3px;
+  border-right: 2px solid var(--orange);
+  border-bottom: 2px solid var(--orange);
+  transform: rotate(45deg);
+  transition: transform 0.3s ease;
+}
+.fold[open] .fold-icon { transform: rotate(-135deg); }
+.fold-inner { padding: 2px 18px 18px; }
+.fold-inner p { margin-bottom: 8px; }
+.fold-inner p:last-child { margin-bottom: 0; }
+/* 닫힘 상태에서는 본문을 확실히 숨긴다(브라우저 기본 <details> 접힘 동작에 의존하지 않음).
+   펼침/접힘 애니메이션 중에는 JS가 open 상태를 유지하므로 본문이 보인다. */
+.fold:not([open]) > .fold-body { display: none; }
 
 /* 상태 통지 (단일 polite live region) */
 .status {

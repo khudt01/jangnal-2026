@@ -160,32 +160,27 @@ main h2::after {
   margin: 12px auto 18px;
 }
 
-/* 모시는 글: 초대 문안은 명조 서체로 */
-#invite p {
+/* ---- 접이식 스킨 (잔치 초대장 톤) ---- */
+/* 제목은 명조 서체로 표지·본문과 결을 맞춘다. */
+.fold-title {
+  font-family: "Gowun Batang", serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+}
+.fold[open] { box-shadow: 0 2px 10px rgba(43, 42, 36, 0.08); }
+
+/* 모시는 글: 초대 문안은 명조 서체로, 넉넉한 줄간격으로 */
+.fold-quote .fold-inner {
+  text-align: center;
+}
+.fold-quote .fold-inner p {
   font-family: "Gowun Batang", serif;
   line-height: 1.9;
   margin-bottom: 10px;
 }
 
-/* ================= 전환 애니메이션 ================= */
-/* 한 장이 화면에 나타날 때 부드럽게 떠오른다.
-   (JS가 hidden을 해제하면 display 복원과 함께 재생된다.)
-   prefers-reduced-motion에서는 base.css가 duration을 0으로 눌러 즉시 표시. */
-@keyframes stepIn {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-[data-step]:not([hidden]) {
-  animation: stepIn 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-}
-
-/* 표지 '초대장 열기': 종이 초대장이 위로 젖혀지며 열리는 연출.
-   이 규칙은 위 stepIn보다 뒤에 두어 열기 순간 우선 적용된다. */
-@keyframes coverOpen {
-  0%   { opacity: 1; transform: perspective(1100px) rotateX(0deg) translateY(0) scale(1); }
-  100% { opacity: 0; transform: perspective(1100px) rotateX(-16deg) translateY(-30px) scale(1.03); }
-}
-.hero.cover-opening {
-  transform-origin: center top;
-  animation: coverOpen 0.6s ease-in both;
-}
+/* ================= 펼침 애니메이션 ================= */
+/* 접이식 본문은 JS가 height를 0↔내용 높이로 전환해 아래로 부드럽게 펼친다.
+   JS가 없으면 <details>가 그대로 즉시 펼쳐진다(내용 접근 가능).
+   prefers-reduced-motion에서는 JS가 애니메이션을 건너뛰고 즉시 토글한다. */
+.fold-body { will-change: height; }

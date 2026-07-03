@@ -1,0 +1,193 @@
+/* 공통 베이스: 접근성·폼·레이아웃. 콘셉트 스킨은 theme.css에서 덮어쓴다. */
+
+:root {
+  --ink: #2b2a24;
+  --muted: #6d6b58;
+  --line: #d8d3c0;
+  --bg: #fbf7ef;
+  --card: #ffffff;
+  --orange: #e06a25;
+  --orange-dark: #c25516;
+  --teal: #178e8e;
+  --red: #c13a2a;
+  --focus: #1a6dcc;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { font-size: 16px; }
+
+body {
+  font-family: "Noto Sans KR", "Malgun Gothic", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.65;
+  word-break: keep-all;
+  -webkit-text-size-adjust: 100%;
+}
+
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+
+h1, h2, h3 { line-height: 1.35; }
+h2 { font-size: 1.25rem; margin-bottom: 12px; }
+
+a { color: var(--teal); }
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- 섹션 ---- */
+section { margin-bottom: 36px; }
+
+/* ---- 폼 ---- */
+form { text-align: left; }
+
+.field { margin-bottom: 20px; }
+
+label, legend { font-weight: 700; display: block; margin-bottom: 6px; }
+
+.hint { font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
+
+input[type="text"],
+input[type="tel"],
+textarea,
+select {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--ink);
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+}
+textarea { min-height: 96px; resize: vertical; }
+
+input[aria-invalid="true"],
+textarea[aria-invalid="true"] { border-color: var(--red); }
+
+fieldset { border: 0; }
+fieldset legend { margin-bottom: 8px; }
+
+.choice-group { display: flex; flex-direction: column; gap: 4px; }
+.choice-group.row { flex-direction: row; flex-wrap: wrap; gap: 8px; }
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+.choice:hover { background: rgba(23, 142, 142, 0.06); }
+.choice input {
+  width: 22px; height: 22px;
+  accent-color: var(--orange);
+  flex-shrink: 0;
+}
+
+.field-error {
+  color: var(--red);
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+button, .btn {
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  min-height: 52px;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 26px;
+  background: var(--orange);
+  color: #fff;
+  cursor: pointer;
+}
+button:hover, .btn:hover { background: var(--orange-dark); }
+button.secondary {
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--line);
+}
+button.secondary:hover { background: rgba(0, 0, 0, 0.04); }
+button[aria-disabled="true"] { opacity: 0.6; cursor: default; }
+
+.btn-block { display: block; width: 100%; }
+
+/* 상태 통지 (단일 polite live region) */
+.status {
+  margin-top: 14px;
+  font-weight: 700;
+  min-height: 1.5em;
+}
+.status.error { color: var(--red); }
+.status.success { color: var(--teal); }
+
+/* 개인정보 동의 전문 */
+details {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  background: var(--card);
+}
+details summary {
+  cursor: pointer;
+  font-weight: 700;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+details .privacy-text { font-size: 0.9rem; margin-top: 8px; }
+details .privacy-text p { margin-bottom: 6px; }
+
+/* 허니팟: 시각·SR·탭 순서 모두에서 제외 */
+.hp { display: none !important; }
+
+/* ---- 표 (관리자) ---- */
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+caption { text-align: left; font-weight: 700; margin-bottom: 8px; }
+th, td {
+  border: 1px solid var(--line);
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap;
+}
+td.wrap { white-space: normal; min-width: 160px; }
+thead th { background: rgba(23, 142, 142, 0.08); }
+
+/* ---- 모션 최소화 ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

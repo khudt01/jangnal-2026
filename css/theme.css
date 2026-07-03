@@ -1,0 +1,58 @@
+/* 콘셉트 스킨 (임시 중립판). 시안 A/B 확정 후 이 파일을 교체한다. */
+
+.hero {
+  text-align: center;
+  padding: 36px 0 28px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 36px;
+}
+
+.hero-logo { width: 56px; height: 56px; margin-bottom: 14px; }
+
+.eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.hero h1 {
+  font-family: "Gowun Batang", serif;
+  font-size: 2.6rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  letter-spacing: 0.4em;
+  text-indent: 0.4em;
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+
+.hero-date {
+  font-family: "Gowun Batang", serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.hero-place {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+
+.hero-cta {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+footer {
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}

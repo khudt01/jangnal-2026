@@ -1,0 +1,7 @@
+desktop.ini
+.playwright-mcp/
+scripts/config.local.json
+*.local.json
+__pycache__/
+*.pyc
+.DS_Store

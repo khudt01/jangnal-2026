@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>참석 현황 · 2026 함께하는 장날</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<style>
+  .container { max-width: 960px; }
+  .stats-list { list-style: none; margin-bottom: 20px; }
+  .stats-list li { padding: 4px 0; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+  .token-row { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 24px; flex-wrap: wrap; }
+  .token-row .field { margin-bottom: 0; flex: 1 1 240px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>2026 함께하는 장날 · 참석 현황</h1>
+  <p class="hint">중앙집행위원 전용 페이지입니다. 장날 준비 채팅방에 공유된 열람 암호를 입력해 주세요.</p>
+
+  <div class="token-row">
+    <div class="field">
+      <label for="token">열람 암호</label>
+      <input type="password" id="token" autocomplete="off">
+    </div>
+    <button type="button" id="load-btn">현황 불러오기</button>
+  </div>
+
+  <p class="status" id="status" role="status"></p>
+
+  <div id="result" hidden>
+    <section aria-labelledby="h-stats">
+      <h2 id="h-stats">요약</h2>
+      <ul class="stats-list" id="stats"></ul>
+    </section>
+
+    <section aria-labelledby="h-table">
+      <h2 id="h-table">전체 응답</h2>
+      <div class="toolbar">
+        <button type="button" id="csv-btn" class="secondary">CSV 내려받기</button>
+        <button type="button" id="refresh-btn" class="secondary">새로고침</button>
+      </div>
+      <div class="table-wrap">
+        <table id="table">
+          <caption class="sr-only">참석 응답 목록, 최근 제출 순</caption>
+          <thead>
+            <tr>
+              <th scope="col">제출시각</th>
+              <th scope="col">참석</th>
+              <th scope="col">이름</th>
+              <th scope="col">연락처</th>
+              <th scope="col">구분</th>
+              <th scope="col">동반</th>
+              <th scope="col">편의제공</th>
+              <th scope="col">남기실 말씀</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

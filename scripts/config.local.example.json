@@ -1,0 +1,8 @@
+{
+  "functions_url": "https://<project-ref>.supabase.co/functions/v1",
+  "anon_key": "<supabase anon key>",
+  "admin_token": "<열람 암호>",
+  "roster_xlsx": "<조합원·후원회원 명부 xlsx 절대경로>",
+  "guest_csv": "<외빈 명단 CSV 절대경로 (이름,연락처,소속). 없으면 빈 문자열>",
+  "output_csv": "<참석 현황.csv 출력 절대경로>"
+}

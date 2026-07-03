@@ -8,23 +8,43 @@
 <meta property="og:title" content="함께하는 장날 초대장">
 <meta property="og:description" content="장교조 창립 7주년 기념 전국 조합원 대회 · 2026. 7. 25.(토) 17:30 · 서울 여의도">
 <meta property="og:type" content="website">
-<!-- TODO(콘셉트 확정 후): og:image 추가 -->
+<meta property="og:url" content="https://khudt01.github.io/jangnal-2026/">
+<meta property="og:image" content="https://khudt01.github.io/jangnal-2026/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/theme.css">
 </head>
 <body>
 <div class="container">
+  <div class="frame"></div>
 
-  <!-- ===== 표지 (콘셉트 확정 후 시안 A/B 스킨 적용) ===== -->
+  <!-- ===== 표지 (콘셉트 A 「잔치 초대장」, 2026-07-04 확정) ===== -->
   <header class="hero" data-step="표지">
     <img class="hero-logo" src="assets/symbol.png" alt="">
     <p class="eyebrow">함께하는장애인교원노동조합 창립 7주년</p>
-    <h1>함께하는 장날</h1>
+    <div class="title-row">
+      <h1>함께하는<br>장날</h1>
+      <span class="seal" aria-hidden="true">일곱<br>돌</span>
+    </div>
     <p class="subtitle">전국 조합원 대회</p>
-    <p class="hero-date">2026년 7월 25일 토요일 오후 5시 30분</p>
+    <div class="divider" aria-hidden="true">
+      <span class="dot"></span><span class="line"></span><span class="diamond"></span><span class="line"></span><span class="dot"></span>
+    </div>
+    <p class="hero-date">2026년 7월 25일 토요일</p>
+    <p class="hero-time">오후 5시 30분</p>
     <p class="hero-place">서울 여의도 (장소 확정 후 안내)</p>
+    <!-- TODO: 단체 대표 사진 확정 후 교체 -->
+    <div class="photo">
+      <img src="assets/symbol.png" alt="">
+      <span class="cap">단체 대표 사진이 들어갈 자리입니다</span>
+    </div>
     <a class="btn btn-block hero-cta" id="open-btn" href="#invite">초대장 열기</a>
+    <p class="deadline">7월 10일(금)까지 참석 여부를 알려주세요</p>
     <p class="hero-links"><a href="#rsvp" id="goto-rsvp">참석 응답 바로 가기</a></p>
     <button type="button" id="sound-toggle" class="sound-toggle" hidden>소리 켜짐</button>
   </header>

@@ -1,5 +1,9 @@
-// 2026 함께하는 장날 초대장: 사운드 효과 모듈
-// 지금은 Web Audio 임시 톤. 콘셉트 확정 후 SOUNDS만 실제 음원으로 교체한다.
+// 2026 함께하는 장날 초대장: 사운드 효과 모듈 (콘셉트 A 음원, 2026-07-04)
+// 음원 출처 (Freesound, 모두 CC0):
+//   open    169855 "Wind Chime (G-003)" by GnoteSoundz
+//   page    630019 "Singular Page Turn" by Flem0527
+//   success 541982 "GASP_Chimes_Success_1" by Rob_Marion
+// 재생 실패(파일 누락·미지원) 시 Web Audio 임시 톤으로 폴백한다.
 // (브라우저 정책상 소리는 사용자 첫 조작 이후에만 재생된다.)
 (function () {
   "use strict";
@@ -9,6 +13,27 @@
   var enabled;
   try { enabled = localStorage.getItem(KEY) !== "off"; } catch (e) { enabled = true; }
 
+  // 볼륨은 낮게 유지해 스크린 리더 음성과 겹쳐도 방해하지 않게 한다.
+  var FILES = {
+    open: { src: "assets/sfx/open.mp3", vol: 0.4 },
+    page: { src: "assets/sfx/page.mp3", vol: 0.5 },
+    success: { src: "assets/sfx/success.mp3", vol: 0.4 },
+  };
+
+  var players = {};
+  function player(name) {
+    if (!players[name]) {
+      var a = new Audio(FILES[name].src);
+      a.preload = "auto";
+      a.volume = FILES[name].vol;
+      players[name] = a;
+    }
+    return players[name];
+  }
+  // 첫 조작에서 바로 재생되도록 미리 버퍼링
+  Object.keys(FILES).forEach(player);
+
+  // ---- Web Audio 톤 폴백 ----
   function audioCtx() {
     var AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return null;
@@ -17,7 +42,6 @@
     return ctx;
   }
 
-  // 짧은 톤 하나. 볼륨을 낮게 유지해 스크린 리더 음성과 겹쳐도 방해하지 않게 한다.
   function tone(c, freq, start, dur, type, peak) {
     var osc = c.createOscillator();
     var gain = c.createGain();
@@ -33,14 +57,18 @@
     osc.stop(t0 + dur + 0.05);
   }
 
-  var SOUNDS = {
-    // 초대장 열기: 두 음 상행 차임
+  var TONES = {
     open: function (c) { tone(c, 659.25, 0, 0.35); tone(c, 880, 0.12, 0.45); },
-    // 장 넘김: 짧은 틱
     page: function (c) { tone(c, 523.25, 0, 0.12, "triangle", 0.07); },
-    // 응답 완료: 세 음 팡파르
     success: function (c) { tone(c, 523.25, 0, 0.3); tone(c, 659.25, 0.11, 0.3); tone(c, 783.99, 0.22, 0.5); },
   };
+
+  function fallback(name) {
+    if (!TONES[name]) return;
+    var c = audioCtx();
+    if (!c) return;
+    try { TONES[name](c); } catch (e) { /* 무시 */ }
+  }
 
   window.JangnalSound = {
     isEnabled: function () { return enabled; },
@@ -49,10 +77,15 @@
       try { localStorage.setItem(KEY, enabled ? "on" : "off"); } catch (e) { /* 무시 */ }
     },
     play: function (name) {
-      if (!enabled || !SOUNDS[name]) return;
-      var c = audioCtx();
-      if (!c) return;
-      try { SOUNDS[name](c); } catch (e) { /* 무시 */ }
+      if (!enabled || !FILES[name]) return;
+      var a = player(name);
+      try {
+        a.currentTime = 0;
+        var p = a.play();
+        if (p && p.catch) p.catch(function () { fallback(name); });
+      } catch (e) {
+        fallback(name);
+      }
     },
   };
 })();

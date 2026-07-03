@@ -60,25 +60,36 @@
     setTimeout(finish, 700); // animationend 누락 대비 폴백
   }
 
+  // 다음 장으로 넘어가는 버튼의 라벨 (콜론 없이 자연스러운 동사형)
+  var NEXT_LABELS = {
+    "행사 안내": "행사 안내 보기",
+    "참석 여부": "참석 여부 알리기"
+  };
+
   function initSteps() {
     if (steps.length < 2) return;
+    var last = steps.length - 1;
     steps.forEach(function (s, i) {
       if (i === 0) return;
       var nav = document.createElement("div");
       nav.className = "step-nav";
-      var prev = document.createElement("button");
-      prev.type = "button";
-      prev.className = "secondary";
-      prev.textContent = i === 1 ? "표지로" : "이전 장";
-      prev.addEventListener("click", function () { goStep(i - 1); });
-      nav.appendChild(prev);
-      if (i < steps.length - 1) {
+      if (i < last) {
+        // 중간 장: 다음으로 나아가는 버튼만 (뒤로 가기 버튼 없음)
         var next = document.createElement("button");
         next.type = "button";
         next.className = "step-next";
-        next.textContent = "다음 장: " + steps[i + 1].getAttribute("data-step");
+        var nd = steps[i + 1].getAttribute("data-step");
+        next.textContent = NEXT_LABELS[nd] || (nd + " 보기");
         next.addEventListener("click", function () { goStep(i + 1); });
         nav.appendChild(next);
+      } else {
+        // 마지막 장에만 표지로 돌아가는 버튼
+        var home = document.createElement("button");
+        home.type = "button";
+        home.className = "secondary step-home";
+        home.textContent = "표지로 돌아가기";
+        home.addEventListener("click", function () { goStep(0); });
+        nav.appendChild(home);
       }
       s.appendChild(nav);
     });

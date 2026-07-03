@@ -141,6 +141,7 @@ button[aria-disabled="true"] { opacity: 0.6; cursor: default; }
 /* ---- 장 넘김 내비게이션 (JS가 각 장 끝에 삽입) ---- */
 .step-nav {
   display: flex;
+  justify-content: center;
   gap: 10px;
   margin-top: 28px;
 }

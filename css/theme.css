@@ -217,6 +217,11 @@ main h2::after {
   text-wrap: balance; /* 수동 줄바꿈이 없더라도 줄 길이를 고르게 (미지원 시 무시) */
 }
 .fold-quote .fold-inner p:last-child { margin-bottom: 0; }
+/* 서명: 초대 문안 아래 오른쪽으로, 위 여백을 넉넉히 */
+.fold-quote .fold-inner p.quote-sign {
+  margin-top: 24px;
+  text-align: right;
+}
 
 /* ================= 펼침 애니메이션 ================= */
 /* 접이식 본문은 JS가 height를 0↔내용 높이로 전환해 아래로 부드럽게 펼친다.

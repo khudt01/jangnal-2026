@@ -146,6 +146,25 @@ main h2::after {
 }
 .fold[open] { box-shadow: 0 2px 10px rgba(43, 42, 36, 0.08); }
 
+/* 세부 일정: 각 항목 앞에 다이아몬드 말머리(장식, 스크린리더 미읽음).
+   여러 줄로 넘어가도 본문이 말머리 오른쪽에 맞춰 정렬되도록 매달린 들여쓰기. */
+.fold-info p {
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 12px;
+}
+.fold-info p:last-child { margin-bottom: 0; }
+.fold-info p::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.6em;
+  width: 6px;
+  height: 6px;
+  background: var(--orange);
+  transform: rotate(45deg);
+}
+
 /* 모시는 글: 초대 문안은 명조 서체로, 넉넉한 줄간격으로 */
 .fold-quote .fold-inner {
   text-align: center;

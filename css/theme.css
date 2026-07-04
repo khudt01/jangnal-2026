@@ -73,29 +73,6 @@ body { background: #eae3cf; }
   letter-spacing: 0.04em;
 }
 
-/* 낙관 도장 (장식: 창립 7주년 정보는 eyebrow 텍스트로 이미 전달) */
-.seal {
-  position: absolute;
-  top: -12px;
-  right: -42px;
-  width: 36px;
-  height: 36px;
-  background: #c13a2a;
-  color: #fbf7ef;
-  border-radius: 6px;
-  transform: rotate(6deg);
-  font-family: "Gowun Batang", serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: 0.08em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
-}
-
 .subtitle {
   font-size: 0.9rem;
   letter-spacing: 0.45em;

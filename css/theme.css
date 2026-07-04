@@ -154,6 +154,14 @@ main h2::after {
   margin-bottom: 12px;
 }
 .fold-info p:last-child { margin-bottom: 0; }
+/* 장소 하위 정보(주소·교통편)는 작게·연하게 */
+.fold-info .place-sub {
+  display: inline-block;
+  margin-top: 3px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
 .fold-info p::before {
   content: "";
   position: absolute;

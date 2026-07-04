@@ -171,9 +171,11 @@ main h2::after {
 }
 .fold-quote .fold-inner p {
   font-family: "Gowun Batang", serif;
-  line-height: 1.9;
-  margin-bottom: 10px;
+  line-height: 1.75;
+  margin-bottom: 18px;
+  text-wrap: balance; /* 수동 줄바꿈이 없더라도 줄 길이를 고르게 (미지원 시 무시) */
 }
+.fold-quote .fold-inner p:last-child { margin-bottom: 0; }
 
 /* ================= 펼침 애니메이션 ================= */
 /* 접이식 본문은 JS가 height를 0↔내용 높이로 전환해 아래로 부드럽게 펼친다.

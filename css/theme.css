@@ -176,7 +176,8 @@ main h2::after {
 }
 /* 오시는 길 약도 (이룸센터 → 백년찌개집) */
 .fold-info .route-map {
-  margin: 10px 0 4px;
+  max-width: 215px;
+  margin: 10px auto 4px;
   border: 1px solid #e3decb;
   border-radius: 10px;
   overflow: hidden;

@@ -162,6 +162,18 @@ main h2::after {
   color: var(--muted);
   line-height: 1.55;
 }
+/* 지도 길찾기 링크 */
+.fold-info .place-map {
+  display: inline-block;
+  margin-top: 6px;
+  min-height: 32px;
+  padding: 4px 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--teal);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 .fold-info p::before {
   content: "";
   position: absolute;

@@ -120,6 +120,19 @@
     }
   }
 
+  // 라디오 그룹·단일 체크박스: 오류 문구를 aria-describedby로 연결
+  // (이름·연락처의 markInvalid와 동일하게, 포커스가 컨트롤에 닿으면 오류가 낭독되도록)
+  function markDescribedInvalid(inputs, invalid, errId) {
+    Array.prototype.forEach.call(inputs, function (input) {
+      var desc = (input.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean);
+      var idx = desc.indexOf("err-" + errId);
+      if (invalid && idx === -1) desc.push("err-" + errId);
+      if (!invalid && idx !== -1) desc.splice(idx, 1);
+      if (desc.length) input.setAttribute("aria-describedby", desc.join(" "));
+      else input.removeAttribute("aria-describedby");
+    });
+  }
+
   // 불참 선택 시 참석 전용 항목 숨김
   function syncAttendance() {
     var v = radioValue("attendance");
@@ -169,6 +182,7 @@
     var attendance = radioValue("attendance");
     var attendanceInvalid = !attendance;
     showError("attendance", attendanceInvalid);
+    markDescribedInvalid(form.querySelectorAll('input[name="attendance"]'), attendanceInvalid, "attendance");
     if (attendanceInvalid) {
       firstInvalid = firstInvalid || form.querySelector('input[name="attendance"]');
       count++;
@@ -190,6 +204,7 @@
     var category = radioValue("category");
     var categoryInvalid = !category;
     showError("category", categoryInvalid);
+    markDescribedInvalid(form.querySelectorAll('input[name="category"]'), categoryInvalid, "category");
     if (categoryInvalid) {
       firstInvalid = firstInvalid || form.querySelector('input[name="category"]');
       count++;
@@ -198,6 +213,7 @@
     var privacy = document.getElementById("privacy");
     var privacyInvalid = !privacy.checked;
     showError("privacy", privacyInvalid);
+    markDescribedInvalid([privacy], privacyInvalid, "privacy");
     if (privacyInvalid) { firstInvalid = firstInvalid || privacy; count++; }
 
     return { ok: count === 0, firstInvalid: firstInvalid, count: count };

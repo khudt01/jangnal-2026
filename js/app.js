@@ -85,6 +85,7 @@
     }
 
     function collapse() {
+      window.JangnalSound.play("fold");
       if (reduceMotion()) { details.open = false; return; }
       animate(body.scrollHeight, 0, function () { details.open = false; });
     }
